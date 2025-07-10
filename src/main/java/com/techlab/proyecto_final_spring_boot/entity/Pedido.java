@@ -6,15 +6,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "pedidos")
+@Table(name="pedidos")
 public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     @JsonProperty("id_pedido")
     private Long idPedido;
+    @ManyToMany
     private List<Producto> lProductos = new ArrayList<>();
+
+    @ManyToOne
     private Usuario cliente;
+    @JsonProperty("monto_total")
     private double montoTotal;
 
     // Get & Set.
