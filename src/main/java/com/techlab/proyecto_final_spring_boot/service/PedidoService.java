@@ -1,4 +1,5 @@
 package com.techlab.proyecto_final_spring_boot.service;
+import com.techlab.proyecto_final_spring_boot.entity.LineaPedido;
 import com.techlab.proyecto_final_spring_boot.entity.Pedido;
 import com.techlab.proyecto_final_spring_boot.entity.Producto;
 import com.techlab.proyecto_final_spring_boot.entity.Usuario;
@@ -11,10 +12,11 @@ import java.util.List;
 public class PedidoService implements iPedidoService {
 
     public final PedidoRepository pedidoRepository;
-
+    public final ProductoService productoService;
     //Const.
-    public PedidoService(PedidoRepository pedidoRepository) {
+    public PedidoService(PedidoRepository pedidoRepository, ProductoService productoService) {
         this.pedidoRepository = pedidoRepository;
+        this.productoService = productoService;
     }
 
     // Met.
@@ -30,18 +32,26 @@ public class PedidoService implements iPedidoService {
         return pedidoRepository.findById(idPedido).orElse(null);
     }
 
-    public Pedido agregarProductoAlPedido(Long idPedido, Producto producto) {
+    public Pedido agregarProductoAlPedido(Long idPedido, Long idProducto, int cant) {
         Pedido pedido = buscarPedidoPorId(idPedido);
+        Producto producto = productoService.buscarProductoPorId(idProducto);
 
-        if (pedido != null) {
-            pedido.getlProductos().add(producto);
-            double totalAcumulado = pedido.getMontoTotal() + producto.getPrecio();
+        if (pedido != null && producto != null) {
+            LineaPedido lineaP = new LineaPedido();
+            lineaP.setProducto(producto);
+            lineaP.setCantidad(cant);
+            lineaP.setPedido(pedido);
+
+            pedido.getLineaPedido().add(lineaP);
+
+            double totalAcumulado = pedido.getMontoTotal() + producto.getPrecio() * cant;
+
             pedido.setMontoTotal(totalAcumulado);
 
             return pedidoRepository.save(pedido);
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     public List<Pedido> listarPedidos() {

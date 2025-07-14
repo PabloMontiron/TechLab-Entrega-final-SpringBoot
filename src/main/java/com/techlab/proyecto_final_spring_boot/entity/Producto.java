@@ -8,7 +8,6 @@ public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    @JsonProperty("id_producto")
     private Long idProducto;
     private String nombre;
     private double precio;

@@ -1,4 +1,5 @@
 package com.techlab.proyecto_final_spring_boot.controller;
+import com.techlab.proyecto_final_spring_boot.dto.ProductoDto;
 import com.techlab.proyecto_final_spring_boot.entity.Pedido;
 import com.techlab.proyecto_final_spring_boot.entity.Producto;
 import com.techlab.proyecto_final_spring_boot.entity.Usuario;
@@ -52,11 +53,10 @@ public class PedidoController {
     }
 
     @PutMapping("/agregarproducto/{id}")
-    public ResponseEntity<String> agregarProductoAlPedido(@PathVariable Long id, @RequestBody Producto producto) {
-        Pedido pedido = pedidoService.buscarPedidoPorId(id);
+    public ResponseEntity<String> agregarProductoAlPedido(@PathVariable Long id, @RequestBody ProductoDto productoDto) {
+        Pedido pedido = pedidoService.agregarProductoAlPedido(id,productoDto.getIdProducto(),productoDto.getCantidad());
 
         if (pedido != null) {
-            pedidoService.agregarProductoAlPedido(id,producto);
             return ResponseEntity.ok("Producto agregado al carrito de compras.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo agregar el producto.");

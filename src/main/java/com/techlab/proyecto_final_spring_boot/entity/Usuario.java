@@ -8,11 +8,8 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    @JsonProperty("id_usuario")
     private Long idUsuario;
-    @JsonProperty("nombre_usuario")
     private String nombreUsuario;
-    @JsonProperty("nom_y_ape")
     private String nomYApe;
     private int dni;
 
